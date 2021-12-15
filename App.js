@@ -24,9 +24,7 @@ const App = () => {
 }
 
 const styles = StyleSheet.create({
-	container: {
-		padding: 16
-	}
+	container: {}
 })
 
 export default App
