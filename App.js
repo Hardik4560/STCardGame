@@ -1,5 +1,5 @@
 import React from "react"
-import { SafeAreaView, StatusBar, StyleSheet, View } from "react-native"
+import { SafeAreaView, StatusBar, StyleSheet, Text, View } from "react-native"
 import Colors from "./src/constants/Colors"
 import { Provider } from "react-redux"
 import store from "./src/redux"
@@ -12,8 +12,8 @@ const statusBarBg =
 
 const App = () => {
 	return (
-		<SafeAreaView>
-			<View style={styles.container}>
+		<SafeAreaView style={styles.container}>
+			<View>
 				<StatusBar backgroundColor={statusBarBg} barStyle="dark-content" />
 				<Provider store={store}>
 					<AppContainer />
@@ -24,7 +24,9 @@ const App = () => {
 }
 
 const styles = StyleSheet.create({
-	container: {}
+	container: {
+		flex: 1
+	}
 })
 
 export default App

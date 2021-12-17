@@ -1,28 +1,25 @@
 import { createSlice } from "@reduxjs/toolkit"
+import produce from "immer"
+import { act } from "react-test-renderer"
+import initCards from "../helpers/CardsGenerator"
 
-export const counterSlice = createSlice({
-	name: "counter",
+export const cardSlice = createSlice({
+	name: "player",
 	initialState: {
-		value: 0
+		cards: initCards()
 	},
 	reducers: {
-		increment: state => {
-			// Redux Toolkit allows us to write "mutating" logic in reducers. It
-			// doesn't actually mutate the state because it uses the Immer library,
-			// which detects changes to a "draft state" and produces a brand new
-			// immutable state based off those changes
-			state.value += 1
-		},
-		decrement: state => {
-			state.value -= 1
-		},
-		incrementByAmount: (state, action) => {
-			state.value += action.payload
-		}
+		cardClicked: produce((state, action) => {
+			let card = state.cards.find(element => element.id == action.payload)
+			card.clicked = true
+		}),
+		updateCard: produce((state, action) => {
+			let card = state.cards.find(element => element.id == action.payload.id)
+		})
 	}
 })
 
 // Action creators are generated for each case reducer function
-export const { increment, decrement, incrementByAmount } = counterSlice.actions
+export const { updateCard, cardClicked } = cardSlice.actions
 
-export default counterSlice.reducer
+export default cardSlice.reducer

@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from "react"
+import React, { useCallback, useEffect } from "react"
 import {
 	Animated,
 	StyleSheet,
@@ -7,46 +7,41 @@ import {
 	View
 } from "react-native"
 import Colors from "../constants/Colors"
-import { HEIGHT, toPx, WIDTH } from "../constants/Styles"
-
-let animatedValue = new Animated.Value(0)
-let currentValue = 0
+import { HEIGHT, WIDTH } from "../constants/Styles"
 
 const Card = props => {
-	const [isFlipped, setIsFlipped] = useState(false)
+	let animatedValue = new Animated.Value(0)
+	let currentValue = 0
 
-	useEffect(() => {
-		const listener = ({ value }) => {
-			currentValue = value
-		}
-		animatedValue.addListener(listener)
-
-		return animatedValue.removeListener(listener)
-	}, [animatedValue])
+	const listener = ({ value }) => {
+		currentValue = value
+	}
+	animatedValue.addListener(listener)
 
 	const flipAnimation = useCallback(() => {
 		if (currentValue >= 90) {
-			setIsFlipped(false)
+			//Closing the card
 			Animated.spring(animatedValue, {
 				toValue: 0,
 				tension: 15,
 				friction: 4,
-				useNativeDriver: false
-			}).start(() => {
-				console.log("Animation flip to right ended")
-			})
+				useNativeDriver: true
+			}).start()
 		} else {
-			setIsFlipped(true)
+			//Openin the card
 			Animated.spring(animatedValue, {
 				toValue: 180,
 				tension: 10,
 				friction: 20,
-				useNativeDriver: false
-			}).start(() => {
-				console.log("Animation flip to left ended")
-			})
+				useNativeDriver: true
+			}).start()
 		}
-	}, [currentValue, setIsFlipped])
+	}, [currentValue])
+
+	const onCardClicked = useCallback(() => {
+		props.onCardClicked(props.id)
+		//flipAnimation()
+	}, [props])
 
 	const rotateLeftInterpolater = animatedValue.interpolate({
 		inputRange: [0, 180],
@@ -66,9 +61,16 @@ const Card = props => {
 		transform: [{ rotateY: rotateRightInterpolater }]
 	}
 
+	useEffect(() => {
+		if (props.clicked) {
+			console.log("Clicked = " + props.clicked)
+			//flipAnimation()
+		}
+	}, [props.clicked])
+
 	return (
 		<View>
-			<TouchableOpacity onPress={flipAnimation}>
+			<TouchableOpacity onPress={onCardClicked}>
 				<Animated.View style={[rotateLeftInterpolaterStyle, styles.content]}>
 					<Text style={styles.text_front}>?</Text>
 				</Animated.View>
@@ -79,7 +81,7 @@ const Card = props => {
 						styles.content_back
 					]}
 				>
-					<Text style={styles.text_back}>{props.number}</Text>
+					<Text style={styles.text_back}>{props.pair_id}</Text>
 				</Animated.View>
 			</TouchableOpacity>
 		</View>
@@ -90,8 +92,8 @@ const styles = StyleSheet.create({
 	content: {
 		marginTop: 10,
 		marginLeft: 10,
-		width: WIDTH / 3,
-		height: HEIGHT / 4,
+		width: WIDTH / 3 - 15,
+		height: HEIGHT / 4 - 45,
 		alignItems: "center",
 		justifyContent: "center",
 		backgroundColor: Colors.card_bg,

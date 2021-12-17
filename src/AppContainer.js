@@ -1,23 +1,21 @@
 import React from "react"
 import { StyleSheet, Text, View } from "react-native"
+import { useDispatch } from "react-redux"
 import Card from "./components/Card"
-import FlipView from "./components/FlipView"
 import Colors from "./constants/Colors"
+import { addCard } from "./redux/reducers/cardReducer"
+import GameScreen from "./screens/GameScreen"
 
 const AppContainer = () => {
 	return (
 		<View style={styles.container}>
-			<View style={styles.content}>
-				<Card number={100}></Card>
-			</View>
+			<GameScreen />
 		</View>
 	)
 }
 
 const styles = StyleSheet.create({
-	container: {
-		flex: 1
-	}
+	container: {}
 })
 
 export default AppContainer
