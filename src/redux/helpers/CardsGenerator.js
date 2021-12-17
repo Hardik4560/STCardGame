@@ -26,13 +26,25 @@ const initCards = () => {
 		cards.push({
 			id: index + 1,
 			pair_id: CARD_PAIRS_VALUE[counter++],
-			flipped: false,
-			matched: false,
-			clicked: false
+			opened: false,
+			matched: false
 		})
 	}
 
+	shuffleArray(cards)
+
 	return cards
+}
+
+const shuffleArray = array => {
+	let i = array.length - 1
+	for (; i > 0; i--) {
+		const j = Math.floor(Math.random() * (i + 1))
+		const temp = array[i]
+		array[i] = array[j]
+		array[j] = temp
+	}
+	return array
 }
 
 export default initCards

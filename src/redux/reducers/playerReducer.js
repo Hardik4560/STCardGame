@@ -1,40 +1,29 @@
 import { createSlice } from "@reduxjs/toolkit"
-import { cardClicked } from "./cardReducer"
 
 export const playerSlice = createSlice({
 	name: "player",
 	initialState: {
 		score: 0,
-		cardFlipped: false,
-		firstFlippedCard: undefined,
-		openCards: []
+		won: false
 	},
 	reducers: {
 		increaseScore: state => {
 			state.score += 1
 		},
-		reset: state => {
-			;(state.score = 0), (cardFlipped = 0)
+		resetPlayer: state => {
+			;(state.score = 0), (state.won = false)
 		},
-		flipCard: state => {
-			state.cardFlipped = !state.cardFlipped
-		},
-		updateFirstFlippedCard: (state, action) => {
-			state.firstFlippedCard = action.payload
-		},
-		addOpenCards: (state, action) => {
-			state.openCards.push(action.payload)
+		setWon: (state, action) => {
+			state.won = action.payload
 		}
 	}
 })
 
+export const handlePlayerCardClick = item => async dispatch => {
+	dispatch(increaseScore())
+}
+
 // Action creators are generated for each case reducer function
-export const {
-	increaseScore,
-	reset,
-	flipCard,
-	addOpenCards,
-	updateFirstFlippedCard
-} = playerSlice.actions
+export const { increaseScore, resetPlayer, setWon } = playerSlice.actions
 
 export default playerSlice.reducer

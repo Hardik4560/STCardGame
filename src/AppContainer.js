@@ -1,9 +1,5 @@
 import React from "react"
-import { StyleSheet, Text, View } from "react-native"
-import { useDispatch } from "react-redux"
-import Card from "./components/Card"
-import Colors from "./constants/Colors"
-import { addCard } from "./redux/reducers/cardReducer"
+import { StyleSheet, View } from "react-native"
 import GameScreen from "./screens/GameScreen"
 
 const AppContainer = () => {

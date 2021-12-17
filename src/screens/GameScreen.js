@@ -1,45 +1,41 @@
-import React, { useCallback } from "react"
+import React, { useCallback, useState } from "react"
 import {
 	FlatList,
+	Modal,
+	Pressable,
 	StyleSheet,
 	Text,
 	TouchableOpacity,
 	View
 } from "react-native"
+import LogBoxInspectorContainer from "react-native/Libraries/LogBox/LogBoxInspectorContainer"
 import { useDispatch, useSelector } from "react-redux"
 import Card from "../components/Card"
 import Colors from "../constants/Colors"
+import YouWonPopup from "../popups/YouWonPopup"
 import {
-	addOpenCards,
-	flipCard,
-	increaseScore,
+	addToOpenCards,
+	resetBoard,
+	resetGame,
+	setLoading,
+	updateCard,
+	updateSelectCard as updateSelectedCard
+} from "../redux/reducers/gameReducer"
+import {
+	handlePlayerCardClick,
 	reset,
-	updateFirstFlippedCard
+	setWon
 } from "../redux/reducers/playerReducer"
-
-function shuffleArray(array) {
-	let i = array.length - 1
-	for (; i > 0; i--) {
-		const j = Math.floor(Math.random() * (i + 1))
-		const temp = array[i]
-		array[i] = array[j]
-		array[j] = temp
-	}
-	return array
-}
 
 const GameScreen = () => {
 	const dispatch = useDispatch()
 
-	const { score, cardFlipped, openCards, firstFlippedCard } = useSelector(
-		state => state.player
-	)
-	const { cards } = useSelector(state => state.card)
+	const { score, won } = useSelector(state => state.player)
 
-	shuffleArray(cards)
+	const { cards, open_cards, selected_card } = useSelector(state => state.game)
 
 	const onResetClick = useCallback(() => {
-		dispatch(reset())
+		dispatch(resetGame())
 	}, [dispatch])
 
 	const onCardPressed = useCallback(
@@ -47,54 +43,70 @@ const GameScreen = () => {
 			console.log("--------------------")
 			console.log("Item clicked = " + itemId)
 
-			console.log("Open Cards = " + JSON.stringify(openCards))
-			console.log(
-				"firstFlipped Card = " + JSON.stringify(firstFlippedCard, null, 4)
-			)
-			console.log("cardFlipped = " + cardFlipped)
+			console.log("Open Cards = " + JSON.stringify(open_cards))
+			console.log("selected Card = " + JSON.stringify(selected_card, null, 4))
 
-			//1. Check if a card is already opened.
-			//2. Check if the card first or second
-			//3. Check if the open card matches the current card.
-			//4. Mark the current and opened card as matched.
-
-			const foundCard = openCards.find(element => element.id === itemId)
+			const foundCard = open_cards.find(element => element.id === itemId)
 
 			//If the card is not opened already.
 			if (!foundCard) {
 				const currentCard = cards.find(element => element.id == itemId)
-
 				console.log("Pair id = " + currentCard.pair_id)
-				//If this is the first card being opened, update the player info.
-				if (!cardFlipped) {
-					dispatch(updateFirstFlippedCard(currentCard))
-					dispatch(flipCard())
-				} else {
-					//Match with the previously opened card.
-					if (firstFlippedCard.pair_id === currentCard.pair_id) {
-						//Match found
-						dispatch(addOpenCards(currentCard))
-						dispatch(addOpenCards(firstFlippedCard))
-					}
-
-					//Not matched,
-					setTimeout(() => {
-						dispatch(updateFirstFlippedCard(undefined))
-						dispatch(flipCard())
-
-						//Toggle the card animation to turn the cards back.
-						//Current card.flip
-						//firstFlippedCard.flip
-						console.log("Flipback the cards, both of them!!")
-					}, 1000)
+				if (currentCard.opened) {
+					return
 				}
 
-				dispatch(increaseScore())
-			}
+				dispatch(handlePlayerCardClick())
 
-			//dispatch(cardClicked(itemId))
+				console.log("Handled Player card click. = " + selected_card)
+				//If no card is already selected, set this card as selected.
+				if (!selected_card) {
+					console.log("Setting selected card = " + currentCard)
+					dispatch(updateSelectedCard(currentCard))
+				} else {
+					console.log("No card selected")
+
+					//Match with the previously opened card.
+					if (selected_card.pair_id === currentCard.pair_id) {
+						//Match found
+						dispatch(addToOpenCards(currentCard))
+
+						//Update card information and make them as matched.
+						dispatch(
+							updateCard({ ...currentCard, matched: true, opened: true })
+						)
+						dispatch(
+							updateCard({ ...selected_card, matched: true, opened: true })
+						)
+
+						console.log("Opencards = " + open_cards.length)
+						console.log("Cards length = " + cards.length)
+						//Check of all the cards are matched.
+						if ((open_cards.length + 1) * 2 == cards.length) {
+							console.log("You won!!!!")
+							dispatch(setWon(true))
+						}
+					} else {
+						dispatch(setLoading(true))
+						//Not matched,
+						setTimeout(() => {
+							//Toggle the card animation to turn the cards back.
+							dispatch(setLoading(false))
+							//Current card.flip
+							//firstFlippedCard.flip
+							dispatch(updateCard({ ...currentCard, opened: false }))
+							dispatch(updateCard({ ...selected_card, opened: false }))
+
+							console.log("Flipback the cards, both of them!!")
+						}, 1000)
+					}
+
+					//Reset the selected card.
+					dispatch(updateSelectedCard(undefined))
+				}
+			}
 		},
-		[dispatch, firstFlippedCard, openCards, cardFlipped]
+		[dispatch, selected_card, open_cards, cards]
 	)
 
 	const renderItem = ({ item }) => (
@@ -104,11 +116,13 @@ const GameScreen = () => {
 	return (
 		<View style={styles.content}>
 			<View style={styles.stats}>
-				<TouchableOpacity onPress={onResetClick}>
-					<Text>Reset</Text>
+				<TouchableOpacity style={[styles.button]} onPress={onResetClick}>
+					<Text style={[styles.reset]}>Reset</Text>
 				</TouchableOpacity>
 				<View>
-					<Text>Score: {score} </Text>
+					<Text style={styles.score_label}>
+						Score: <Text style={styles.score}> {score} </Text>
+					</Text>
 				</View>
 			</View>
 			<FlatList
@@ -118,6 +132,7 @@ const GameScreen = () => {
 				renderItem={renderItem}
 				keyExtractor={item => "_" + item.id}
 			/>
+			<YouWonPopup isVisible={won} />
 		</View>
 	)
 }
@@ -127,8 +142,30 @@ const styles = StyleSheet.create({
 	stats: {
 		width: "100%",
 		height: 50,
-		backgroundColor: Colors.app_bg,
-		flexDirection: "column"
+		paddingLeft: 10,
+		paddingRight: 20,
+		justifyContent: "space-between",
+		alignContent: "center",
+		alignItems: "center",
+		display: "flex",
+		flexDirection: "row"
+	},
+	header: {},
+	reset: {
+		fontSize: 20
+	},
+	button: {
+		backgroundColor: Colors.cloud,
+		borderRadius: 10,
+		borderWidth: 1,
+		padding: 10,
+		elevation: 2
+	},
+	score: {
+		fontSize: 20
+	},
+	score_label: {
+		fontSize: 16
 	}
 })
 

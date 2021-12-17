@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect } from "react"
+import React, { useCallback, useEffect, useState } from "react"
 import {
 	Animated,
 	StyleSheet,
@@ -6,43 +6,38 @@ import {
 	TouchableOpacity,
 	View
 } from "react-native"
+import { useDispatch, useSelector } from "react-redux"
 import Colors from "../constants/Colors"
 import { HEIGHT, WIDTH } from "../constants/Styles"
+import { cardClicked } from "../redux/reducers/gameReducer"
 
 const Card = props => {
-	let animatedValue = new Animated.Value(0)
-	let currentValue = 0
+	const dispatch = useDispatch()
 
-	const listener = ({ value }) => {
-		currentValue = value
-	}
-	animatedValue.addListener(listener)
+	const { isLoading } = useSelector(state => state.game)
+	const [animatedValue, setAnimatedValue] = useState(new Animated.Value(0))
 
-	const flipAnimation = useCallback(() => {
-		if (currentValue >= 90) {
-			//Closing the card
-			Animated.spring(animatedValue, {
-				toValue: 0,
-				tension: 15,
-				friction: 4,
-				useNativeDriver: true
-			}).start()
-		} else {
-			//Openin the card
-			Animated.spring(animatedValue, {
-				toValue: 180,
-				tension: 10,
-				friction: 20,
-				useNativeDriver: true
-			}).start()
-		}
-	}, [currentValue])
+	const flipClose = useCallback(() => {
+		//Closing the card
+		Animated.spring(animatedValue, {
+			toValue: 0,
+			tension: 15,
+			friction: 4,
+			useNativeDriver: true
+		}).start()
+	})
 
-	const onCardClicked = useCallback(() => {
-		props.onCardClicked(props.id)
-		//flipAnimation()
-	}, [props])
+	const flipOpen = useCallback(() => {
+		//Openin the card
+		Animated.spring(animatedValue, {
+			toValue: 180,
+			tension: 10,
+			friction: 20,
+			useNativeDriver: true
+		}).start(() => {})
+	})
 
+	//INTERPOLATERS
 	const rotateLeftInterpolater = animatedValue.interpolate({
 		inputRange: [0, 180],
 		outputRange: ["0deg", "180deg"]
@@ -61,16 +56,27 @@ const Card = props => {
 		transform: [{ rotateY: rotateRightInterpolater }]
 	}
 
+	//BEHAVIOURAL FUNCTIONS
 	useEffect(() => {
-		if (props.clicked) {
-			console.log("Clicked = " + props.clicked)
-			//flipAnimation()
+		console.log("Id = " + props.pair_id + " Props opened = " + props.opened)
+		if (props.opened) {
+			flipOpen()
+		} else {
+			flipClose()
 		}
-	}, [props.clicked])
+	}, [props.opened])
+
+	const onCardClicked = useCallback(() => {
+		dispatch(cardClicked(props.id))
+		props.onCardClicked(props.id)
+	})
 
 	return (
 		<View>
-			<TouchableOpacity onPress={onCardClicked}>
+			<TouchableOpacity
+				onPress={onCardClicked}
+				disabled={props.matched || isLoading || props.opened}
+			>
 				<Animated.View style={[rotateLeftInterpolaterStyle, styles.content]}>
 					<Text style={styles.text_front}>?</Text>
 				</Animated.View>
@@ -78,7 +84,7 @@ const Card = props => {
 					style={[
 						rotateRightInterpolaterStyle,
 						styles.content,
-						styles.content_back
+						props.matched ? styles.content_matched : styles.content_back
 					]}
 				>
 					<Text style={styles.text_back}>{props.pair_id}</Text>
@@ -100,14 +106,18 @@ const styles = StyleSheet.create({
 		borderColor: Colors.card_bg_border,
 		borderStyle: "solid",
 		borderRadius: 16,
-		borderWidth: 4,
-		opacity: 0.7,
+		borderWidth: 2,
 		backfaceVisibility: "hidden"
 	},
 	content_back: {
 		position: "absolute",
 		top: 0,
 		backgroundColor: Colors.card_flipped
+	},
+	content_matched: {
+		position: "absolute",
+		top: 0,
+		backgroundColor: Colors.card_matched
 	},
 	text_back: {
 		alignItems: "center",
