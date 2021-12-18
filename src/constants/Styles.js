@@ -1,13 +1,10 @@
-import { Dimensions, PixelRatio } from "react-native"
+import { useSafeAreaInsets } from "react-native-safe-area-context"
+import { HEIGHT } from "./Dimens"
 
-export const HEIGHT = Dimensions.get("window").height
+export const statsHeight = 50
 
-export const WIDTH = Dimensions.get("window").width
+export const FlatListHeight = () => {
+	const insets = useSafeAreaInsets()
 
-export const toPx = size => {
-	return PixelRatio.getPixelSizeForLayoutSize(size)
-}
-
-export const scaledFont = size => {
-	return PixelRatio.getFontScale(size)
+	return HEIGHT - (insets.bottom + insets.top + statsHeight)
 }

@@ -1,8 +1,15 @@
 import React, { useCallback, useEffect, useState } from "react"
-import { Animated, StyleSheet, TouchableOpacity, View } from "react-native"
+import {
+	Animated,
+	StyleSheet,
+	TouchableHighlight,
+	TouchableOpacity,
+	View
+} from "react-native"
 import { useDispatch, useSelector } from "react-redux"
 import Colors from "../constants/Colors"
-import { HEIGHT, WIDTH } from "../constants/Styles"
+import { HEIGHT, StatusBarHeight, WIDTH } from "../constants/Dimens"
+import { FlatListHeight, statsHeight } from "../constants/Styles"
 import { cardClicked } from "../redux/reducers/gameReducer"
 import TextView from "../ui/TextView"
 
@@ -67,33 +74,40 @@ const Card = props => {
 
 	return (
 		<View>
-			<TouchableOpacity
+			<TouchableHighlight
+				underlayColor="none"
 				onPress={onCardClicked}
 				disabled={props.matched || isLoading || props.opened}
 			>
-				<Animated.View style={[rotateLeftInterpolaterStyle, styles.content]}>
-					<TextView style={styles.text_front}>?</TextView>
-				</Animated.View>
-				<Animated.View
-					style={[
-						rotateRightInterpolaterStyle,
-						styles.content,
-						props.matched ? styles.content_matched : styles.content_back
-					]}
-				>
-					<TextView style={styles.text_back}>{props.pair_id}</TextView>
-				</Animated.View>
-			</TouchableOpacity>
+				<>
+					<Animated.View
+						style={[
+							rotateLeftInterpolaterStyle,
+							styles.content,
+							{ height: FlatListHeight() / 4 - 18 }
+						]}
+					>
+						<TextView style={styles.text_front}>?</TextView>
+					</Animated.View>
+					<Animated.View
+						style={[
+							rotateRightInterpolaterStyle,
+							styles.content,
+							{ height: FlatListHeight() / 4 - 18 },
+							props.matched ? styles.content_matched : styles.content_back
+						]}
+					>
+						<TextView style={styles.text_back}>{props.pair_id}</TextView>
+					</Animated.View>
+				</>
+			</TouchableHighlight>
 		</View>
 	)
 }
 
 const styles = StyleSheet.create({
 	content: {
-		marginTop: 10,
-		marginLeft: 10,
-		width: WIDTH / 3 - 15,
-		height: HEIGHT / 4 - 45,
+		width: WIDTH / 3 - 12,
 		alignItems: "center",
 		justifyContent: "center",
 		backgroundColor: Colors.card_bg,

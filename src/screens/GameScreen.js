@@ -3,6 +3,7 @@ import { FlatList, StyleSheet, TouchableOpacity, View } from "react-native"
 import { useDispatch, useSelector } from "react-redux"
 import Card from "../components/Card"
 import Colors from "../constants/Colors"
+import { FlatListHeight, statsHeight } from "../constants/Styles"
 import YouWonPopup from "../popups/YouWonPopup"
 import {
 	addToOpenCards,
@@ -99,6 +100,9 @@ const GameScreen = () => {
 	const renderItem = ({ item }) => (
 		<Card {...item} onCardClicked={onCardPressed} />
 	)
+	const verticalItemSeparator = () => (
+		<View style={styles.flatListItemSeparator} />
+	)
 
 	return (
 		<View style={styles.content}>
@@ -113,6 +117,9 @@ const GameScreen = () => {
 				</View>
 			</View>
 			<FlatList
+				contentContainerStyle={[styles.flatList, { height: FlatListHeight() }]}
+				columnWrapperStyle={styles.flatListColumnSeparator}
+				ItemSeparatorComponent={verticalItemSeparator}
 				key={3}
 				numColumns={3}
 				data={cards}
@@ -125,14 +132,11 @@ const GameScreen = () => {
 }
 
 const styles = StyleSheet.create({
-	container: {
-		backgroundColor: Colors.white
-	},
+	content: { display: "flex", flexDirection: "column" },
 	stats: {
 		backgroundColor: Colors.header,
 		width: "100%",
-		height: 50,
-		marginVertical: 15,
+		height: statsHeight,
 		paddingLeft: 10,
 		paddingRight: 20,
 		justifyContent: "space-around",
@@ -141,6 +145,14 @@ const styles = StyleSheet.create({
 		display: "flex",
 		flexDirection: "row"
 	},
+	flatList: {
+		marginHorizontal: 8,
+		paddingVertical: 12
+	},
+	flatListColumnSeparator: {
+		justifyContent: "space-between"
+	},
+	flatListItemSeparator: { padding: 4 },
 	header: {},
 	reset: {
 		fontSize: 20,
