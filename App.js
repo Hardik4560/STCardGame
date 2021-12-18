@@ -4,13 +4,12 @@ import {
 	SafeAreaView,
 	StatusBar,
 	StyleSheet,
-	Text,
 	View
 } from "react-native"
-import Colors from "./src/constants/Colors"
 import { Provider } from "react-redux"
-import store from "./src/redux"
 import AppContainer from "./src/AppContainer"
+import Colors from "./src/constants/Colors"
+import store from "./src/redux"
 
 const statusBarBg =
 	Platform.OS !== "android" || Platform?.constants?.Version >= 23

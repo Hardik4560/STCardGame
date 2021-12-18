@@ -10,11 +10,11 @@
 		"lint": "eslint .",
 		"clean:android": "echo 'require(\"child_process\").execSync(\"cd android; ./gradlew clean\", {stdio: \"inherit\"})' | node ",
 		"clean:ios": "echo 'require(\"child_process\").execSync(\"cd ios; xcodebuild clean\", {stdio: \"inherit\"})' | node ",
-		"clean": "npm run clean:android && npm run clean:ios"
+		"clean": "npm run clean:android && npm run clean:ios",
+		"prepare": "husky install"
 	},
 	"dependencies": {
 		"@reduxjs/toolkit": "^1.7.0",
-		"import-sort-style-wes": "^3.0.2",
 		"react": "17.0.2",
 		"react-native": "0.66.4",
 		"react-redux": "^7.2.6"
@@ -22,14 +22,30 @@
 	"devDependencies": {
 		"@babel/core": "^7.16.5",
 		"@babel/runtime": "^7.16.5",
-		"@react-native-community/eslint-config": "^3.0.1",
+		"babel-eslint": "^10.1.0",
 		"babel-jest": "^27.4.5",
+		"eslint-plugin-react": "^7.27.1",
+		"eslint-plugin-react-native": "^4.0.0",
+		"husky": ">=6",
+		"@react-native-community/eslint-config": "^2.0.0",
+		"eslint": "^7.10.0",
+		"eslint-config-prettier": "^6.12.0",
 		"jest": "^27.4.5",
+		"lint-staged": ">=10",
 		"metro-react-native-babel-preset": "^0.66.2",
 		"prettier": "2.5.1",
 		"react-test-renderer": "17.0.2"
 	},
+	"husky": {
+		"hooks": {
+			"pre-commit": "lint-staged"
+		}
+	},
 	"jest": {
 		"preset": "react-native"
+	},
+	"lint-staged": {
+		"*.js": "eslint --cache --fix",
+		"*.{js,css,md}": "prettier --write"
 	}
 }

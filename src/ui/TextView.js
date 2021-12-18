@@ -1,7 +1,7 @@
 import React from "react"
 import { StyleSheet, Text } from "react-native"
 
-export default TextView = ({ children, style, ...props }) => {
+const TextView = ({ children, style, ...props }) => {
 	return (
 		<Text {...props} style={[styles.text, style]}>
 			{children}
@@ -14,3 +14,5 @@ const styles = StyleSheet.create({
 		fontFamily: "badcomic"
 	}
 })
+
+export default TextView

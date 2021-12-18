@@ -37,7 +37,7 @@ const GameScreen = () => {
 
 			//If the card is not opened already.
 			if (!foundCard) {
-				const currentCard = cards.find(element => element.id == itemId)
+				const currentCard = cards.find(element => element.id === itemId)
 				console.log("Pair id = " + currentCard.pair_id)
 				if (currentCard.opened) {
 					return
@@ -69,7 +69,7 @@ const GameScreen = () => {
 						console.log("Opencards = " + open_cards.length)
 						console.log("Cards length = " + cards.length)
 						//Check of all the cards are matched.
-						if ((open_cards.length + 1) * 2 == cards.length) {
+						if ((open_cards.length + 1) * 2 === cards.length) {
 							console.log("You won!!!!")
 							dispatch(setWon(true))
 						}
@@ -97,7 +97,7 @@ const GameScreen = () => {
 	)
 
 	const renderItem = ({ item }) => (
-		<Card {...item} onCardClicked={onCardPressed}></Card>
+		<Card {...item} onCardClicked={onCardPressed} />
 	)
 
 	return (

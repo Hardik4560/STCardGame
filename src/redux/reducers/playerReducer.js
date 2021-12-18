@@ -11,7 +11,8 @@ export const playerSlice = createSlice({
 			state.score += 1
 		},
 		resetPlayer: state => {
-			;(state.score = 0), (state.won = false)
+			state.score = 0
+			state.won = false
 		},
 		setWon: (state, action) => {
 			state.won = action.payload

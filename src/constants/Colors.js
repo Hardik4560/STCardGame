@@ -1,7 +1,7 @@
 const primaryColor = "#22a6b3"
 const secondaryColor = "#7ed6df"
 
-export default Colors = {
+const Colors = {
 	primary_color: primaryColor,
 	white: "#fff",
 	black: "#000",
@@ -18,3 +18,4 @@ export default Colors = {
 	text_dark: "#ffffff",
 	text_light: "#000000"
 }
+export default Colors

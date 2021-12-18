@@ -1,18 +1,11 @@
 import React from "react"
-import {
-	Button,
-	Modal,
-	Pressable,
-	StyleSheet,
-	Text,
-	TouchableOpacity,
-	View
-} from "react-native"
+import { Modal, StyleSheet, TouchableOpacity, View } from "react-native"
 import { useDispatch, useSelector } from "react-redux"
 import Colors from "../constants/Colors"
 import { resetGame } from "../redux/reducers/gameReducer"
+import TextView from "../ui/TextView"
 
-export default YouWonPopup = ({ isVisible }) => {
+const YouWonPopup = ({ isVisible }) => {
 	const dispatch = useDispatch()
 	const { score } = useSelector(state => state.player)
 
@@ -21,10 +14,7 @@ export default YouWonPopup = ({ isVisible }) => {
 			animationType="fade"
 			transparent={true}
 			visible={isVisible}
-			onRequestClose={() => {
-				Alert.alert("Modal has been closed.")
-				setModalVisible(!modalVisible)
-			}}
+			onRequestClose={() => {}}
 		>
 			<View style={styles.centeredView}>
 				<View style={styles.modalView}>
@@ -104,3 +94,5 @@ const styles = StyleSheet.create({
 		textAlign: "center"
 	}
 })
+
+export default YouWonPopup

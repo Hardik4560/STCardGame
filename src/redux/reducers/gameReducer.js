@@ -17,11 +17,11 @@ export const gameSlice = createSlice({
 	initialState: getInitState(),
 	reducers: {
 		cardClicked: produce((state, action) => {
-			let card = state.cards.find(element => element.id == action.payload)
+			let card = state.cards.find(element => element.id === action.payload)
 			card.opened = true
 		}),
 		updateCard: produce((state, action) => {
-			let card = state.cards.find(element => element.id == action.payload.id)
+			let card = state.cards.find(element => element.id === action.payload.id)
 			card.opened = action.payload.opened
 			card.matched = action.payload.matched
 		}),
@@ -35,10 +35,10 @@ export const gameSlice = createSlice({
 			state.isLoading = action.payload
 		}),
 		resetCards: produce(state => {
-			;(state.cards = initCards()),
-				(state.open_cards = []),
-				(state.selected_card = undefined),
-				(state.isLoading = false)
+			state.cards = initCards()
+			state.open_cards = []
+			state.selected_card = undefined
+			state.isLoading = false
 		})
 	}
 })

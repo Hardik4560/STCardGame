@@ -4,12 +4,13 @@ import { useDispatch, useSelector } from "react-redux"
 import Colors from "../constants/Colors"
 import { HEIGHT, WIDTH } from "../constants/Styles"
 import { cardClicked } from "../redux/reducers/gameReducer"
+import TextView from "../ui/TextView"
 
 const Card = props => {
 	const dispatch = useDispatch()
 
 	const { isLoading } = useSelector(state => state.game)
-	const [animatedValue, setAnimatedValue] = useState(new Animated.Value(0))
+	const [animatedValue] = useState(new Animated.Value(0))
 
 	const flipClose = useCallback(() => {
 		//Closing the card
@@ -19,7 +20,7 @@ const Card = props => {
 			friction: 4,
 			useNativeDriver: true
 		}).start()
-	})
+	}, [animatedValue])
 
 	const flipOpen = useCallback(() => {
 		//Openin the card
@@ -29,7 +30,7 @@ const Card = props => {
 			friction: 20,
 			useNativeDriver: true
 		}).start(() => {})
-	})
+	}, [animatedValue])
 
 	//INTERPOLATERS
 	const rotateLeftInterpolater = animatedValue.interpolate({
@@ -52,18 +53,17 @@ const Card = props => {
 
 	//BEHAVIOURAL FUNCTIONS
 	useEffect(() => {
-		console.log("Id = " + props.pair_id + " Props opened = " + props.opened)
 		if (props.opened) {
 			flipOpen()
 		} else {
 			flipClose()
 		}
-	}, [props.opened])
+	}, [flipClose, flipOpen, props.opened])
 
 	const onCardClicked = useCallback(() => {
 		dispatch(cardClicked(props.id))
 		props.onCardClicked(props.id)
-	})
+	}, [dispatch, props])
 
 	return (
 		<View>
