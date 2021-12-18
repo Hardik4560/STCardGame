@@ -1,31 +1,18 @@
-import React, { useCallback, useState } from "react"
-import {
-	FlatList,
-	Modal,
-	Pressable,
-	StyleSheet,
-	Text,
-	TouchableOpacity,
-	View
-} from "react-native"
-import LogBoxInspectorContainer from "react-native/Libraries/LogBox/LogBoxInspectorContainer"
+import React, { useCallback } from "react"
+import { FlatList, StyleSheet, TouchableOpacity, View } from "react-native"
 import { useDispatch, useSelector } from "react-redux"
 import Card from "../components/Card"
 import Colors from "../constants/Colors"
 import YouWonPopup from "../popups/YouWonPopup"
 import {
 	addToOpenCards,
-	resetBoard,
 	resetGame,
 	setLoading,
 	updateCard,
 	updateSelectCard as updateSelectedCard
 } from "../redux/reducers/gameReducer"
-import {
-	handlePlayerCardClick,
-	reset,
-	setWon
-} from "../redux/reducers/playerReducer"
+import { handlePlayerCardClick, setWon } from "../redux/reducers/playerReducer"
+import TextView from "../ui/TextView"
 
 const GameScreen = () => {
 	const dispatch = useDispatch()
@@ -117,12 +104,12 @@ const GameScreen = () => {
 		<View style={styles.content}>
 			<View style={styles.stats}>
 				<TouchableOpacity style={[styles.button]} onPress={onResetClick}>
-					<Text style={[styles.reset]}>Reset</Text>
+					<TextView style={[styles.reset]}>Reset</TextView>
 				</TouchableOpacity>
 				<View>
-					<Text style={styles.score_label}>
-						Score: <Text style={styles.score}> {score} </Text>
-					</Text>
+					<TextView style={styles.score_label}>
+						Score: <TextView style={styles.score}> {score} </TextView>
+					</TextView>
 				</View>
 			</View>
 			<FlatList
@@ -138,13 +125,17 @@ const GameScreen = () => {
 }
 
 const styles = StyleSheet.create({
-	container: {},
+	container: {
+		backgroundColor: Colors.white
+	},
 	stats: {
+		backgroundColor: Colors.header,
 		width: "100%",
 		height: 50,
+		marginVertical: 15,
 		paddingLeft: 10,
 		paddingRight: 20,
-		justifyContent: "space-between",
+		justifyContent: "space-around",
 		alignContent: "center",
 		alignItems: "center",
 		display: "flex",
@@ -152,20 +143,19 @@ const styles = StyleSheet.create({
 	},
 	header: {},
 	reset: {
-		fontSize: 20
+		fontSize: 20,
+		color: Colors.text_dark
 	},
 	button: {
-		backgroundColor: Colors.cloud,
-		borderRadius: 10,
-		borderWidth: 1,
-		padding: 10,
-		elevation: 2
+		padding: 10
 	},
 	score: {
-		fontSize: 20
+		color: Colors.text_dark,
+		fontSize: 25
 	},
 	score_label: {
-		fontSize: 16
+		color: Colors.text_label_light,
+		fontSize: 20
 	}
 })
 

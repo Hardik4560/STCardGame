@@ -1,11 +1,5 @@
 import React, { useCallback, useEffect, useState } from "react"
-import {
-	Animated,
-	StyleSheet,
-	Text,
-	TouchableOpacity,
-	View
-} from "react-native"
+import { Animated, StyleSheet, TouchableOpacity, View } from "react-native"
 import { useDispatch, useSelector } from "react-redux"
 import Colors from "../constants/Colors"
 import { HEIGHT, WIDTH } from "../constants/Styles"
@@ -78,7 +72,7 @@ const Card = props => {
 				disabled={props.matched || isLoading || props.opened}
 			>
 				<Animated.View style={[rotateLeftInterpolaterStyle, styles.content]}>
-					<Text style={styles.text_front}>?</Text>
+					<TextView style={styles.text_front}>?</TextView>
 				</Animated.View>
 				<Animated.View
 					style={[
@@ -87,7 +81,7 @@ const Card = props => {
 						props.matched ? styles.content_matched : styles.content_back
 					]}
 				>
-					<Text style={styles.text_back}>{props.pair_id}</Text>
+					<TextView style={styles.text_back}>{props.pair_id}</TextView>
 				</Animated.View>
 			</TouchableOpacity>
 		</View>
@@ -106,8 +100,14 @@ const styles = StyleSheet.create({
 		borderColor: Colors.card_bg_border,
 		borderStyle: "solid",
 		borderRadius: 16,
-		borderWidth: 2,
-		backfaceVisibility: "hidden"
+		backfaceVisibility: "hidden",
+		borderWidth: 1,
+		borderBottomWidth: 0,
+		shadowColor: "#000",
+		shadowOffset: { width: 0, height: 2 },
+		shadowOpacity: 0.4,
+		shadowRadius: 2,
+		elevation: 2
 	},
 	content_back: {
 		position: "absolute",
@@ -121,12 +121,13 @@ const styles = StyleSheet.create({
 	},
 	text_back: {
 		alignItems: "center",
-		fontSize: 30
+		fontSize: 30,
+		color: Colors.black
 	},
 	text_front: {
 		alignItems: "center",
-		fontSize: 50,
-		color: Colors.card_bg_border,
+		fontSize: 80,
+		color: Colors.white,
 		fontWeight: "bold"
 	}
 })

@@ -7,7 +7,10 @@
 		"ios": "react-native run-ios",
 		"start": "react-native start",
 		"test": "jest",
-		"lint": "eslint ."
+		"lint": "eslint .",
+		"clean:android": "echo 'require(\"child_process\").execSync(\"cd android; ./gradlew clean\", {stdio: \"inherit\"})' | node ",
+		"clean:ios": "echo 'require(\"child_process\").execSync(\"cd ios; xcodebuild clean\", {stdio: \"inherit\"})' | node ",
+		"clean": "npm run clean:android && npm run clean:ios"
 	},
 	"dependencies": {
 		"@reduxjs/toolkit": "^1.7.0",

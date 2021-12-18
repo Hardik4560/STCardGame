@@ -1,10 +1,20 @@
 import React from "react"
-import { Button, Modal, Pressable, StyleSheet, Text, View } from "react-native"
-import { useDispatch } from "react-redux"
+import {
+	Button,
+	Modal,
+	Pressable,
+	StyleSheet,
+	Text,
+	TouchableOpacity,
+	View
+} from "react-native"
+import { useDispatch, useSelector } from "react-redux"
+import Colors from "../constants/Colors"
 import { resetGame } from "../redux/reducers/gameReducer"
 
 export default YouWonPopup = ({ isVisible }) => {
 	const dispatch = useDispatch()
+	const { score } = useSelector(state => state.player)
 
 	return (
 		<Modal
@@ -18,12 +28,19 @@ export default YouWonPopup = ({ isVisible }) => {
 		>
 			<View style={styles.centeredView}>
 				<View style={styles.modalView}>
-					<Text style={styles.modalText}>Good Job!</Text>
-					<Button
-						style={styles.textStyle}
-						title="PLAY AGAIN"
-						onPress={() => dispatch(resetGame())}
-					></Button>
+					<View style={styles.header}>
+						<TextView style={styles.title}>Good Job!</TextView>
+					</View>
+					<View style={styles.modalContent}>
+						<TextView style={styles.score_label}>
+							score: <TextView style={styles.score}>{score}</TextView>
+						</TextView>
+						<TouchableOpacity onPress={() => dispatch(resetGame())}>
+							<TextView style={styles.play_again_text} title="PLAY AGAIN">
+								Play Again
+							</TextView>
+						</TouchableOpacity>
+					</View>
 				</View>
 			</View>
 		</Modal>
@@ -38,11 +55,23 @@ const styles = StyleSheet.create({
 		backgroundColor: "#000000aa",
 		marginTop: 22
 	},
+	header: {
+		backgroundColor: Colors.header,
+		borderTopStartRadius: 20,
+		borderTopRightRadius: 20,
+		paddingHorizontal: "20%",
+		paddingVertical: 15,
+		justifyContent: "center"
+	},
+	title: {
+		color: Colors.text_dark,
+		fontWeight: "bold",
+		textAlign: "center",
+		fontSize: 30
+	},
 	modalView: {
-		margin: 20,
-		backgroundColor: "white",
+		backgroundColor: Colors.app_bg_light,
 		borderRadius: 20,
-		padding: 35,
 		alignItems: "center",
 		shadowColor: "#000",
 		shadowOffset: {
@@ -53,14 +82,25 @@ const styles = StyleSheet.create({
 		shadowRadius: 4,
 		elevation: 5
 	},
-	textStyle: {
-		color: "white",
-		fontWeight: "bold",
+	score_label: {
+		color: Colors.text_label_dark,
+		fontSize: 30
+	},
+	score: {
+		color: Colors.text_dark,
+		fontSize: 30,
 		textAlign: "center"
 	},
-	modalText: {
-		marginBottom: 15,
-		fontSize: 45,
+	modalContent: {
+		paddingVertical: 30,
+		justifyContent: "center",
+		alignItems: "center"
+	},
+	play_again_text: {
+		marginTop: 20,
+		color: "white",
+		fontSize: 40,
+		fontWeight: "bold",
 		textAlign: "center"
 	}
 })

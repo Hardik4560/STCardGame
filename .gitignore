@@ -58,3 +58,5 @@ buck-out/
 
 # CocoaPods
 /ios/Pods/
+react-native.config.js
+android/app/release/output-metadata.json
