@@ -16,12 +16,12 @@ const YouWonPopup = ({ isVisible }) => {
 			visible={isVisible}
 			onRequestClose={() => {}}
 		>
-			<View style={styles.centeredView}>
-				<View style={styles.modalView}>
+			<View style={styles.centered_view}>
+				<View style={styles.modal_view}>
 					<View style={styles.header}>
 						<TextView style={styles.title}>Good Job!</TextView>
 					</View>
-					<View style={styles.modalContent}>
+					<View style={styles.modal_content}>
 						<TextView style={styles.score_label}>
 							score: <TextView style={styles.score}>{score}</TextView>
 						</TextView>
@@ -38,12 +38,11 @@ const YouWonPopup = ({ isVisible }) => {
 }
 
 const styles = StyleSheet.create({
-	centeredView: {
+	centered_view: {
 		flex: 1,
 		justifyContent: "center",
 		alignItems: "center",
-		backgroundColor: "#000000aa",
-		marginTop: 22
+		backgroundColor: "#000000aa"
 	},
 	header: {
 		backgroundColor: Colors.header,
@@ -59,7 +58,7 @@ const styles = StyleSheet.create({
 		textAlign: "center",
 		fontSize: 30
 	},
-	modalView: {
+	modal_view: {
 		backgroundColor: Colors.app_bg_light,
 		borderRadius: 20,
 		alignItems: "center",
@@ -81,7 +80,7 @@ const styles = StyleSheet.create({
 		fontSize: 30,
 		textAlign: "center"
 	},
-	modalContent: {
+	modal_content: {
 		paddingVertical: 30,
 		justifyContent: "center",
 		alignItems: "center"

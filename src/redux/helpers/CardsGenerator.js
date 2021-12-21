@@ -1,6 +1,14 @@
-const initCards = () => {
+const initCards = count => {
+	if (!count) {
+		throw new Error(`Card value is required to proceed`)
+	}
+
+	if (count % 3 !== 0) {
+		throw new Error(`Cannot generate card using the value ${count}`)
+	}
+
 	const CARD_PAIRS_VALUE = []
-	const CARD_COUNT = 12
+	const CARD_COUNT = count
 
 	const cards = []
 

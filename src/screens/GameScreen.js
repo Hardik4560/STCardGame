@@ -1,5 +1,6 @@
 import React, { useCallback } from "react"
 import { FlatList, StyleSheet, TouchableOpacity, View } from "react-native"
+import { SafeAreaProvider } from "react-native-safe-area-context"
 import { useDispatch, useSelector } from "react-redux"
 import Card from "../components/Card"
 import Colors from "../constants/Colors"
@@ -101,7 +102,7 @@ const GameScreen = () => {
 		<Card {...item} onCardClicked={onCardPressed} />
 	)
 	const verticalItemSeparator = () => (
-		<View style={styles.flatListItemSeparator} />
+		<View style={styles.flat_list_item_separator} />
 	)
 
 	return (
@@ -117,8 +118,8 @@ const GameScreen = () => {
 				</View>
 			</View>
 			<FlatList
-				contentContainerStyle={[styles.flatList, { height: FlatListHeight() }]}
-				columnWrapperStyle={styles.flatListColumnSeparator}
+				contentContainerStyle={[styles.flat_list, { height: FlatListHeight() }]}
+				columnWrapperStyle={styles.flat_list_column_separator}
 				ItemSeparatorComponent={verticalItemSeparator}
 				key={3}
 				numColumns={3}
@@ -145,14 +146,14 @@ const styles = StyleSheet.create({
 		display: "flex",
 		flexDirection: "row"
 	},
-	flatList: {
+	flat_list: {
 		marginHorizontal: 8,
 		paddingVertical: 12
 	},
-	flatListColumnSeparator: {
+	flat_list_column_separator: {
 		justifyContent: "space-between"
 	},
-	flatListItemSeparator: { padding: 4 },
+	flat_list_item_separator: { padding: 4 },
 	header: {},
 	reset: {
 		fontSize: 20,

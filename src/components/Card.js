@@ -1,15 +1,9 @@
 import React, { useCallback, useEffect, useState } from "react"
-import {
-	Animated,
-	StyleSheet,
-	TouchableHighlight,
-	TouchableOpacity,
-	View
-} from "react-native"
+import { Animated, StyleSheet, TouchableHighlight, View } from "react-native"
 import { useDispatch, useSelector } from "react-redux"
 import Colors from "../constants/Colors"
-import { HEIGHT, StatusBarHeight, WIDTH } from "../constants/Dimens"
-import { FlatListHeight, statsHeight } from "../constants/Styles"
+import { WIDTH } from "../constants/Dimens"
+import { FlatListHeight } from "../constants/Styles"
 import { cardClicked } from "../redux/reducers/gameReducer"
 import TextView from "../ui/TextView"
 

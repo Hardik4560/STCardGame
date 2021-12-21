@@ -24,6 +24,7 @@
 		"@babel/core": "^7.16.5",
 		"@babel/runtime": "^7.16.5",
 		"@react-native-community/eslint-config": "^2.0.0",
+		"@testing-library/react": "^12.1.2",
 		"babel-eslint": "^10.1.0",
 		"babel-jest": "^27.4.5",
 		"eslint": "^7.10.0",
@@ -36,9 +37,6 @@
 		"metro-react-native-babel-preset": "^0.66.2",
 		"prettier": "2.5.1",
 		"react-test-renderer": "17.0.2"
-	},
-	"jest": {
-		"preset": "react-native"
 	},
 	"lint-staged": {
 		"*.js": "eslint --cache --fix",

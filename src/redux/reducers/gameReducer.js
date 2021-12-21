@@ -1,11 +1,12 @@
 import { createSlice } from "@reduxjs/toolkit"
 import produce from "immer"
+import { CARDS_COUNT } from "../../constants/Values"
 import initCards from "../helpers/CardsGenerator"
 import { resetPlayer } from "./playerReducer"
 
 export const getInitState = () => {
 	return {
-		cards: initCards(),
+		cards: initCards(CARDS_COUNT),
 		open_cards: [],
 		selected_card: undefined,
 		isLoading: false
@@ -35,7 +36,7 @@ export const gameSlice = createSlice({
 			state.isLoading = action.payload
 		}),
 		resetCards: produce(state => {
-			state.cards = initCards()
+			state.cards = initCards(CARDS_COUNT)
 			state.open_cards = []
 			state.selected_card = undefined
 			state.isLoading = false
