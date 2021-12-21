@@ -34,7 +34,7 @@ export * from "@testing-library/react"
 // override render method
 export { render }
 
-xdescribe("UI Testing", () => {
+describe("UI Testing", () => {
 	it("Renders properly", () => {
 		render(<App />)
 	})
